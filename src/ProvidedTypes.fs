@@ -14246,6 +14246,8 @@ namespace ProviderImplementation.ProvidedTypes
 
                     match ptdT.GetConstructors(bindAll) |> Seq.tryPick (function :? ProvidedConstructor as pc when pc.IsTypeInitializer -> Some pc | _ -> None) with
                     | None -> ()
+                    | Some _ when ptdT.IsInterface ->
+                        failwith "The provided type definition is an interface; therefore, it may not provide constructors."
                     | Some pc ->
                         let cb = ctorMap.[pc]
                         let ilg = cb.GetILGenerator()
@@ -14276,6 +14278,13 @@ namespace ProviderImplementation.ProvidedTypes
                             [ for v in parameterVars -> Expr.Var v ]
 
                         match pminfo.GetInvokeCode with
+                        | Some _ when ptdT.IsInterface ->
+                            failwith "The provided type definition is an interface; therefore, it should not define an implementation for its members."
+                        | Some _ when pminfo.IsAbstract ->
+                            failwith "The provided method is marked as an abstract method; therefore, it should not define an implementation."
+                        | None when not pminfo.IsAbstract ->
+                            failwith "The provided method is not marked as an abstract method; therefore, it should define an implementation."
+                        | None -> ()
                         | Some invokeCode ->
                             let expr = invokeCode parameters
 
@@ -14284,7 +14293,6 @@ namespace ProviderImplementation.ProvidedTypes
                             let expectedState = if (transType minfo.ReturnType = ILType.Void) then ExpectedStackState.Empty else ExpectedStackState.Value
                             let codeGen = CodeGenerator(assemblyMainModule, genUniqueTypeName, implicitCtorArgsAsFields, convTypeToTgt, transType, transFieldSpec, transMeth, transMethRef, transCtorSpec, ilg, methLocals, parameterVars)
                             codeGen.EmitExpr (expectedState, expr)
-                        | None -> ()
                         ilg.Emit I_ret
                       | _ -> ()
 
@@ -14518,14 +14526,23 @@ namespace ProviderImplementation.ProvidedTypes
                 match methodBaseT with
                 | :? ProvidedMethod as mT when (match methodBaseT.DeclaringType with :? ProvidedTypeDefinition as pt -> pt.IsErased | _ -> true) ->
                     match mT.GetInvokeCode with
+                    | Some _ when methodBaseT.DeclaringType.IsInterface ->
+                        failwith "The provided type definition is an interface; therefore, it should not define an implementation for its members."
+                    | Some _ when mT.IsAbstract ->
+                        failwith "The provided method is defined as abstract; therefore, it should not define an implementation."
+                    | None when not mT.IsAbstract ->
+                        failwith "The provided method is not defined as abstract; therefore it should define an implementation."
                     | Some invokeCode ->
                         let exprT = invokeCode(Array.toList parametersT)
                         check exprT
                     | None -> <@@ () @@>
 
                 | :? ProvidedConstructor as mT when (match methodBaseT.DeclaringType with :? ProvidedTypeDefinition as pt -> pt.IsErased | _ -> true) ->
-                    let exprT = mT.GetInvokeCode(Array.toList parametersT)
-                    check exprT
+                    if methodBaseT.DeclaringType.IsInterface then
+                        failwith "The provided type definition is an interface; therefore, it should not define any constructors."
+                    else
+                        let exprT = mT.GetInvokeCode(Array.toList parametersT)
+                        check exprT
 
                 // Otherwise, assume this is a generative assembly and just emit a call to the constructor or method
                 | :?  ConstructorInfo as cinfoT ->
