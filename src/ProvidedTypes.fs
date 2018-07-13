@@ -683,9 +683,9 @@ namespace ProviderImplementation.ProvidedTypes
 
         override this.AssemblyQualifiedName = notRequired this "AssemblyQualifiedName" this.FullName
 
-        override __.GetCustomAttributes(_inherit) = emptyAttributes
+        override __.GetCustomAttributes(_inherit) = Attributes.Empty()
 
-        override __.GetCustomAttributes(attributeType, _inherit) = Attributes<_>.CreateEmpty(attributeType)
+        override __.GetCustomAttributes(attributeType, _inherit) = Attributes.CreateEmpty attributeType
 
         override __.IsDefined(_attributeType, _inherit) = false
 
@@ -744,8 +744,8 @@ namespace ProviderImplementation.ProvidedTypes
         override this.MethodHandle = notRequired this "MethodHandle" genericMethodDefinition.Name
         override this.Invoke(_obj, _invokeAttr, _binder, _parameters, _culture) = notRequired this "Invoke" genericMethodDefinition.Name
         override this.ReflectedType = notRequired this "ReflectedType" genericMethodDefinition.Name
-        override __.GetCustomAttributes(_inherit) = emptyAttributes
-        override __.GetCustomAttributes(attributeType, _inherit) =  Attributes<_>.CreateEmpty attributeType
+        override __.GetCustomAttributes(_inherit) = Attributes<_>.Empty()
+        override __.GetCustomAttributes(attributeType, _inherit) =  Attributes.CreateEmpty attributeType
 
     //--------------------------------------------------------------------------------
     // ProvidedMethod, ProvidedConstructor, ProvidedTypeDefinition and other provided objects
@@ -883,8 +883,8 @@ namespace ProviderImplementation.ProvidedTypes
         override __.Position = 0
         override __.ParameterType = parameterType
         override __.Name = parameterName
-        override __.GetCustomAttributes(_inherit) = emptyAttributes
-        override __.GetCustomAttributes(attributeType, _inherit) = Attributes<_>.CreateEmpty attributeType
+        override __.GetCustomAttributes(_inherit) = Attributes<_>.Empty()
+        override __.GetCustomAttributes(attributeType, _inherit) = Attributes.CreateEmpty attributeType
         override __.GetCustomAttributesData() = customAttributesImpl.GetCustomAttributesData()
 
     type ProvidedParameter(isTgt: bool, parameterName:string, attrs, parameterType:Type, optionalValue:obj option, customAttributesData) =
@@ -969,8 +969,8 @@ namespace ProviderImplementation.ProvidedTypes
         override this.ReflectedType = notRequired this "ReflectedType" this.Name
         override this.GetMethodImplementationFlags() = notRequired this "GetMethodImplementationFlags" this.Name
         override this.MethodHandle = notRequired this "MethodHandle" this.Name
-        override __.GetCustomAttributes(_inherit) = emptyAttributes
-        override __.GetCustomAttributes(attributeType, _inherit) = Attributes<_>.CreateEmpty attributeType
+        override __.GetCustomAttributes(_inherit) = Attributes<_>.Empty()
+        override __.GetCustomAttributes(attributeType, _inherit) = Attributes.CreateEmpty attributeType
         override __.GetCustomAttributesData() = customAttributesImpl.GetCustomAttributesData()
 
     and ProvidedMethod(isTgt: bool, methodName: string, attrs: MethodAttributes, parameters: ProvidedParameter[], returnType: Type, invokeCode: (Expr list -> Expr) option, staticParams, staticParamsApply, customAttributesData) =
@@ -1053,8 +1053,8 @@ namespace ProviderImplementation.ProvidedTypes
         override this.GetMethodImplementationFlags() = notRequired this "GetMethodImplementationFlags" methodName
         override this.Invoke(_obj, _invokeAttr, _binder, _parameters, _culture) = notRequired this "Invoke" methodName
         override this.ReflectedType = notRequired this "ReflectedType" methodName
-        override __.GetCustomAttributes(_inherit) = emptyAttributes
-        override __.GetCustomAttributes(attributeType, _inherit) = Attributes<_>.CreateEmpty attributeType
+        override __.GetCustomAttributes(_inherit) = Attributes<_>.Empty()
+        override __.GetCustomAttributes(attributeType, _inherit) = Attributes.CreateEmpty attributeType
         override __.GetCustomAttributesData() = customAttributesImpl.GetCustomAttributesData()
 
 
@@ -1109,8 +1109,8 @@ namespace ProviderImplementation.ProvidedTypes
         override __.MemberType: MemberTypes = MemberTypes.Property
 
         override this.ReflectedType = notRequired this "ReflectedType" propertyName
-        override __.GetCustomAttributes(_inherit) = emptyAttributes
-        override __.GetCustomAttributes(attributeType, _inherit) = Attributes<_>.CreateEmpty attributeType
+        override __.GetCustomAttributes(_inherit) = Attributes<_>.Empty()
+        override __.GetCustomAttributes(attributeType, _inherit) = Attributes.CreateEmpty attributeType
         override this.IsDefined(_attributeType, _inherit) = notRequired this "IsDefined" propertyName
 
     and ProvidedEvent(isTgt: bool, eventName:string, attrs: EventAttributes, eventHandlerType:Type, isStatic: bool, adder: (unit -> MethodInfo), remover: (unit -> MethodInfo), customAttributesData) =
@@ -1153,8 +1153,8 @@ namespace ProviderImplementation.ProvidedTypes
 
         override this.GetRaiseMethod _nonPublic = notRequired this "GetRaiseMethod" eventName
         override this.ReflectedType = notRequired this "ReflectedType" eventName
-        override __.GetCustomAttributes(_inherit) = emptyAttributes
-        override __.GetCustomAttributes(attributeType, _inherit) = Attributes<_>.CreateEmpty attributeType
+        override __.GetCustomAttributes(_inherit) = Attributes<_>.Empty()
+        override __.GetCustomAttributes(attributeType, _inherit) = Attributes.CreateEmpty attributeType
         override this.IsDefined(_attributeType, _inherit) = notRequired this "IsDefined" eventName
         override __.GetCustomAttributesData() = customAttributesImpl.GetCustomAttributesData()
 
@@ -1190,8 +1190,8 @@ namespace ProviderImplementation.ProvidedTypes
         override __.MemberType: MemberTypes = MemberTypes.Field
 
         override this.ReflectedType = notRequired this "ReflectedType" fieldName
-        override __.GetCustomAttributes(_inherit) = emptyAttributes
-        override __.GetCustomAttributes(attributeType, _inherit) = Attributes<_>.CreateEmpty attributeType
+        override __.GetCustomAttributes(_inherit) = Attributes<_>.Empty()
+        override __.GetCustomAttributes(attributeType, _inherit) = Attributes.CreateEmpty attributeType
         override this.IsDefined(_attributeType, _inherit) = notRequired this "IsDefined" fieldName
 
         override this.SetValue(_obj, _value, _invokeAttr, _binder, _culture) = notRequired this "SetValue" fieldName
