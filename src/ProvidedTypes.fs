@@ -158,7 +158,7 @@ namespace ProviderImplementation.ProvidedTypes
         type Attributes = 
             static member CreateEmpty (typ : Type) =
                 let gtype = typedefof<Attributes<_>>.MakeGenericType([| typ |])
-                let gmethod = gtype.GetMethod("Empty", BindingFlags.Static ||| BindingFlags.NonPublic )
+                let gmethod = gtype.GetMethod("Empty", BindingFlags.Static ||| BindingFlags.NonPublic ||| BindingFlags.Public )
                 gmethod.Invoke(null, [||]) :?> obj array
 
         let nonNull str x = if isNull x then failwithf "Null in '%s', stacktrace = '%s'" str Environment.StackTrace else x
